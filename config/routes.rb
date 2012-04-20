@@ -1,4 +1,33 @@
 StoreEngine::Application.routes.draw do
+
+  root to: "products#index"
+
+  resources :categories, only: [:index, :show]
+  resources :products, only: [:index, :show]
+  resources :orders, only: [:index, :new, :show, :update, :create]
+  resources :users, only: [:new, :show, :update, :create, :edit]
+  resources :shipping_informations, only: [:new, :show, :edit, :update, :create, :destroy]
+  resources :billing_informations, only: [:new, :show, :edit, :update, :create, :destroy]
+  resources :sessions, only: [:new, :create, :destroy]
+  resources :category_products, only: :create
+
+  resources :cart_items, only: [:create, :update, :destroy]
+  resource :cart, :only => [:show, :destroy]
+  
+  match '/signup',  to: 'users#new'
+  match '/signin',  to: 'sessions#new'
+  match '/signout', to: 'sessions#destroy', via: :delete
+
+  namespace :admin do
+    root :to => "dashboard#index"
+    resources :products
+    resources :categories
+    resources :orders
+    resource  :order_items, only: [:edit, :update, :destroy]
+    resources :users
+    resources :dashboard, only: :index
+  end
+  
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
